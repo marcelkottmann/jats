@@ -18,52 +18,52 @@ add following snippet to the build-plugins section of your pom.xml
 <pre>
 
 
-<plugin>
-	<groupId>com.github.pepe79.tsgenerator</groupId>
-	<artifactId>generate-typescript-maven-plugin</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
-	<configuration>
-		<targetDirectory>src/main/ts</targetDirectory>
-		<sourceDirectory>src/main/java</sourceDirectory>
-		<packageDirectory>[PACKAGE_DIRECTORY_IN_SOURCE_PATH]</packageDirectory>
+&lt;plugin&gt;
+	&lt;groupId&gt;com.github.pepe79.tsgenerator&lt;/groupId&gt;
+	&lt;artifactId&gt;generate-typescript-maven-plugin&lt;/artifactId&gt;
+	&lt;version&gt;0.0.1-SNAPSHOT&lt;/version&gt;
+	&lt;configuration&gt;
+		&lt;targetDirectory&gt;src/main/ts&lt;/targetDirectory&gt;
+		&lt;sourceDirectory&gt;src/main/java&lt;/sourceDirectory&gt;
+		&lt;packageDirectory&gt;[PACKAGE_DIRECTORY_IN_SOURCE_PATH]&lt;/packageDirectory&gt;
 		
-		<!-- Exclude list of simple class names (without package) -->
-		<!--
-		<excludes>
-			<exclude></exclude>
-			<exclude></exclude>
-			<exclude></exclude>
-		</excludes>
-		-->
+		&lt;!-- Exclude list of simple class names (without package) --&gt;
+		&lt;!--
+		&lt;excludes&gt;
+			&lt;exclude&gt;&lt;/exclude&gt;
+			&lt;exclude&gt;&lt;/exclude&gt;
+			&lt;exclude&gt;&lt;/exclude&gt;
+		&lt;/excludes&gt;
+		--&gt;
 
-		<!-- Include sources outside of your configured source package -->
-		<!--
-		<includeSources>
-			<includeSource>package/directory/to/source/Source.java</includeSource>
-		</includeSources>
-		-->
+		&lt;!-- Include sources outside of your configured source package --&gt;
+		&lt;!--
+		&lt;includeSources&gt;
+			&lt;includeSource&gt;package/directory/to/source/Source.java&lt;/includeSource&gt;
+		&lt;/includeSources&gt;
+		--&gt;
 
-		<!-- Include compiled classes (dont forget to add the corresponding jar to the plugin dependencies) -->
-		<!--
-		<classes>
-			<class>full.qualified.Classname.Here</class>
-			<class>...</class>
-		</classes>
-		-->
+		&lt;!-- Include compiled classes (dont forget to add the corresponding jar to the plugin dependencies) --&gt;
+		&lt;!--
+		&lt;classes&gt;
+			&lt;class&gt;full.qualified.Classname.Here&lt;/class&gt;
+			&lt;class&gt;...&lt;/class&gt;
+		&lt;/classes&gt;
+		--&gt;
 		
-	</configuration>
-	<dependencies>
-		<!-- If you have included classes for generation you have to configure the corresponding jars, 
-		where this classes can be found. -->
-		<!--
-		<dependency>
-			<groupId>...</groupId>
-			<artifactId>...</artifactId>
-			<version>...</version>
-		</dependency>
-		-->
-	</dependencies>
-</plugin>
+	&lt;/configuration&gt;
+	&lt;dependencies&gt;
+		&lt;!-- If you have included classes for generation you have to configure the corresponding jars, 
+		where this classes can be found. --&gt;
+		&lt;!--
+		&lt;dependency&gt;
+			&lt;groupId&gt;...&lt;/groupId&gt;
+			&lt;artifactId&gt;...&lt;/artifactId&gt;
+			&lt;version&gt;...&lt;/version&gt;
+		&lt;/dependency&gt;
+		--&gt;
+	&lt;/dependencies&gt;
+&lt;/plugin&gt;
 
 
 </pre>
