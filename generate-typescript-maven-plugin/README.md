@@ -12,6 +12,10 @@ best matching typescript data type. The main difference between source- or class
 generator is that the component types of generic classes can't be extracted from compiled java-classes 
 (because of type erasure).
 
+The result of the generator is one typescript file for every source- or class-file input 
+and a <b>project.ts</b> file which references all generated sources and brings them in the 
+right order for the typescript converter. Use this single project.ts for reference include in 
+your typescript project.
 
 usage:
 add following snippet to the build-plugins section of your pom.xml 
