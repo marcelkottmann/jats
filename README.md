@@ -3,3 +3,4 @@
 <h2>generate-typescript-maven-plugin</h2>
 https://github.com/pepe79/jats/tree/master/generate-typescript-maven-plugin
 
+-
