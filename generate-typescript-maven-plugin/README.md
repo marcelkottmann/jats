@@ -16,7 +16,6 @@ generator is that the component types of generic classes can't be extracted from
 usage:
 add following snippet to the build-plugins section of your pom.xml 
 
-`
 <plugin>
 	<groupId>com.github.pepe79.tsgenerator</groupId>
 	<artifactId>generate-typescript-maven-plugin</artifactId>
@@ -63,6 +62,6 @@ add following snippet to the build-plugins section of your pom.xml
 		-->
 	</dependencies>
 </plugin>
-`
+
 
 
