@@ -19,9 +19,8 @@ your typescript project.
 
 usage:
 add following snippet to the build-plugins section of your pom.xml 
+
 <pre>
-
-
 &lt;plugin&gt;
 	&lt;groupId&gt;com.github.pepe79.tsgenerator&lt;/groupId&gt;
 	&lt;artifactId&gt;generate-typescript-maven-plugin&lt;/artifactId&gt;
@@ -29,7 +28,15 @@ add following snippet to the build-plugins section of your pom.xml
 	&lt;configuration&gt;
 		&lt;targetDirectory&gt;src/main/ts&lt;/targetDirectory&gt;
 		&lt;sourceDirectory&gt;src/main/java&lt;/sourceDirectory&gt;
-		&lt;packageDirectory&gt;[PACKAGE_DIRECTORY_IN_SOURCE_PATH]&lt;/packageDirectory&gt;
+		
+		&lt;packageDirectories&gt;
+			&lt;packageDirectory&gt;[PACKAGE_DIRECTORY_IN_SOURCE_PATH]&lt;/packageDirectory&gt;
+			&lt;!-- 
+				more package directories
+				&lt;packageDirectory&gt;....&lt;/packageDirectory&gt;
+				&lt;packageDirectory&gt;....&lt;/packageDirectory&gt;
+			--&gt;
+		&lt;/packageDirectories&gt;
 		
 		&lt;!-- Exclude list of simple class names (without package) --&gt;
 		&lt;!--
@@ -71,3 +78,12 @@ add following snippet to the build-plugins section of your pom.xml
 
 
 </pre>
+
+Start typescript generator with following command
+<pre>
+	mvn generate-typescript-maven-plugin:generate-ts
+</pre>
+
+This plugin can be used together with https://github.com/jstrachan/typescript-maven-plugin , which 
+compiles the generated typescript sources to javascript.
+ 

@@ -1,0 +1,69 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.github.pepe79</groupId>
+	<artifactId>jats-demo-webapp</artifactId>
+	<packaging>war</packaging>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>jats-demo-webapp Maven Webapp</name>
+	<url>http://maven.apache.org</url>
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>3.8.1</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+	
+	<build>
+		<finalName>jats-demo-webapp</finalName>
+
+		<plugins>
+			<plugin>
+				<groupId>com.github.pepe79.tsgenerator</groupId>
+				<artifactId>generate-typescript-maven-plugin</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+				<configuration>
+					<targetDirectory>src/main/ts</targetDirectory>
+					<sourceDirectory>src/main/java</sourceDirectory>
+					
+					<packageDirectories>
+						<packageDirectory>com/github/pepe79/jats/demo/model</packageDirectory>
+					</packageDirectories>
+					
+					<!-- Exclude list of simple class names (without package) -->
+					<!-- <excludes> <exclude></exclude> <exclude></exclude> <exclude></exclude> 
+						</excludes> -->
+
+					<!-- Include sources outside of your configured source package -->
+					<!-- <includeSources> <includeSource>package/directory/to/source/Source.java</includeSource> 
+						</includeSources> -->
+
+					<!-- Include compiled classes (dont forget to add the corresponding 
+						jar to the plugin dependencies) -->
+					<!-- <classes> <class>full.qualified.Classname.Here</class> <class>...</class> 
+						</classes> -->
+
+				</configuration>
+				<dependencies>
+					<!-- If you have included classes for generation you have to configure 
+						the corresponding jars, where this classes can be found. -->
+					<!-- <dependency> <groupId>...</groupId> <artifactId>...</artifactId> 
+						<version>...</version> </dependency> -->
+				</dependencies>
+			</plugin>
+
+	       <plugin>
+	          <groupId>com.ppedregal.typescript</groupId>
+	          <artifactId>typescript-maven-plugin</artifactId>
+	          <version>0.0.1-SNAPSHOT</version>
+	          <configuration>
+		            <sourceDirectory>src/main/ts/project</sourceDirectory>
+		            <targetDirectory>target/ts</targetDirectory>
+		        </configuration>    
+	        </plugin>
+	        
+		</plugins>
+	</build>
+</project>

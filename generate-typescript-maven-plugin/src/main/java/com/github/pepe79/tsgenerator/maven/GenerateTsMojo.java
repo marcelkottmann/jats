@@ -1,22 +1,24 @@
 package com.github.pepe79.tsgenerator.maven;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.StringUtils;
+import org.apache.maven.plugin.AbstractMojo;
+import org.apache.maven.plugin.MojoExecutionException;
+
 import com.github.pepe79.tsgenerator.descriptor.ClassDescriptor;
 import com.github.pepe79.tsgenerator.fromclass.GeneratorFromClass;
 import com.github.pepe79.tsgenerator.fromsource.GeneratorFromSource;
 import com.github.pepe79.tsgenerator.generator.GenerationContext;
 import com.github.pepe79.tsgenerator.generator.TypeScriptGenerator;
-
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.StringReader;
-import java.util.Collection;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.io.IOUtils;
-import org.apache.maven.plugin.AbstractMojo;
-import org.apache.maven.plugin.MojoExecutionException;
-
 
 /**
  * @goal generate-ts
@@ -31,15 +33,43 @@ public class GenerateTsMojo extends AbstractMojo
 	private File targetDirectory;
 
 	/**
-	 * @parameter expression="${ts.sourceDirectory}" default-value="src/main/java"
+	 * @parameter expression="${ts.generatedClassesDirectory}"
+	 *            default-value="model"
+	 * @required
+	 */
+	private String generatedClassesDirectory;
+
+	/**
+	 * @parameter expression="${ts.generatedProjectTsDirectory}"
+	 *            default-value="project"
+	 * @required
+	 */
+	private String generatedProjectTsDirectory;
+
+	/**
+	 * @parameter expression="${ts.useRelativePathInProjectTs}"
+	 *            default-value="../"
+	 * @required
+	 */
+	private String useRelativePathInProjectTs;
+
+	/**
+	 * @parameter expression="${ts.sourceDirectory}"
+	 *            default-value="src/main/java"
 	 */
 	private File sourceDirectory;
 
 	/**
-	 * @parameter expression="${ts.packageDirectory}"
+	 * @parameter expression="${ts.packageDirectories.packageDirectory}"
 	 * @required
 	 */
-	private String packageDirectory;
+	private String[] packageDirectories;
+
+	/**
+	 * @parameter expression="${ts.projectTsFileName}"
+	 *            default-value="project.ts"
+	 */
+	private String projectTsFileName;
 
 	/**
 	 * @parameter expression="${ts.includeSources.includeSource}"
@@ -77,43 +107,60 @@ public class GenerateTsMojo extends AbstractMojo
 	@Override
 	public void execute() throws MojoExecutionException
 	{
-		File modelDirectory = new File(sourceDirectory, packageDirectory);
-		prepare(modelDirectory);
-		prepare(targetDirectory);
+		File targetModelDirectory = new File(targetDirectory,
+				generatedClassesDirectory);
+		File targetProjectTsDirectory = new File(targetDirectory,
+				generatedProjectTsDirectory);
 
-		int compiledFiles = 0;
-		getLog().info("Searching for java files in modelDirectory: " + modelDirectory);
-		Collection<File> files = FileUtils.listFiles(modelDirectory, new String[]{"java"}, true);
-		getLog().info(files.size() + " java files found in modelDirectory: " + modelDirectory);
+		prepare(targetDirectory);
+		prepare(targetModelDirectory);
+		prepare(targetProjectTsDirectory);
+
+		int generatedFiles = 0;
+		List<File> collectedSourceFiles = new ArrayList<File>();
+		for (String packageDirectory : packageDirectories)
+		{
+			File modelDirectory = new File(sourceDirectory, packageDirectory);
+
+			getLog().info(
+					"Searching for java files in directory: " + modelDirectory);
+			collectedSourceFiles.addAll(FileUtils.listFiles(modelDirectory,
+					new String[]
+					{ "java" }, true));
+		}
+		getLog().info(collectedSourceFiles.size() + " java files found.");
 
 		if (includeSources != null)
 		{
 			for (String includeSource : includeSources)
 			{
-				files.add(new File(sourceDirectory, includeSource));
+				collectedSourceFiles.add(new File(sourceDirectory,
+						includeSource));
 			}
 		}
 
 		GenerationContext context = new GenerationContext();
-		for (File file : files)
+		for (File file : collectedSourceFiles)
 		{
 			try
 			{
-				String targetFileName = FilenameUtils.removeExtension(FilenameUtils.getName(file.getName())) + ".ts";
-				File targetFile = new File(targetDirectory, targetFileName).getAbsoluteFile();
+				String targetFileName = FilenameUtils
+						.removeExtension(FilenameUtils.getName(file.getName()))
+						+ ".ts";
+				File targetFile = new File(targetModelDirectory, targetFileName)
+						.getAbsoluteFile();
 
 				getLog().info("input file: " + file);
 				getLog().info("output file: " + targetFile);
 
 				if (file.exists())
 				{
-					getLog().info(String.format("Compiling: %s", file));
 					compile(context, file, targetFile);
-					getLog().info(String.format("Generated: %s", targetFileName));
-					compiledFiles++;
+					getLog().info(
+							String.format("Generated: %s", targetFileName));
+					generatedFiles++;
 				}
-			}
-			catch (Exception e)
+			} catch (Exception e)
 			{
 				getLog().error("error", e);
 				throw new RuntimeException("Error", e);
@@ -122,33 +169,41 @@ public class GenerateTsMojo extends AbstractMojo
 
 		for (String clazz : classes)
 		{
-			ClassDescriptor cd = GeneratorFromClass.createClassDescriptor(clazz);
+			ClassDescriptor cd = GeneratorFromClass
+					.createClassDescriptor(clazz);
 			if (!isInExclude(cd.getName()))
 			{
 				String s = TypeScriptGenerator.generate(context, cd);
-				File targetFile = new File(targetDirectory, cd.getName() + ".ts").getAbsoluteFile();
+				File targetFile = new File(targetModelDirectory, cd.getName()
+						+ ".ts").getAbsoluteFile();
 				writeStringToFile(s, targetFile);
+				generatedFiles++;
 			}
 		}
 
 		// create references file of compiled files.
-		File referencesFile = new File(targetDirectory, "project.ts").getAbsoluteFile();
-		getLog().info(String.format("Generating references: %s", referencesFile.toString()));
+		File referencesFile = new File(targetProjectTsDirectory,
+				projectTsFileName).getAbsoluteFile();
+		getLog().info(
+				String.format("Generating references: %s",
+						referencesFile.toString()));
 		generateReferences(context, referencesFile);
+		generatedFiles++;
 
-		if (compiledFiles == 0)
-		{
-			getLog().info("Nothing to compile.");
-		}
-		else
-		{
-			getLog().info(String.format("Compiled %s files", compiledFiles));
-		}
+		getLog().info(String.format("%s files generated.", generatedFiles));
 	}
 
 	private void generateReferences(GenerationContext context, File target)
 	{
-		String s = TypeScriptGenerator.generateReferences(context);
+		String relativePath = useRelativePathInProjectTs
+				+ generatedClassesDirectory;
+		if (StringUtils.isNotEmpty(relativePath) && !relativePath.endsWith("/"))
+		{
+			relativePath = relativePath + "/";
+		}
+
+		String s = TypeScriptGenerator
+				.generateReferences(relativePath, context);
 		writeStringToFile(s, target);
 	}
 
@@ -170,11 +225,6 @@ public class GenerateTsMojo extends AbstractMojo
 	public String[] getIncludeSources()
 	{
 		return includeSources;
-	}
-
-	public String getPackageDirectory()
-	{
-		return packageDirectory;
 	}
 
 	public File getSourceDirectory()
@@ -231,9 +281,14 @@ public class GenerateTsMojo extends AbstractMojo
 		this.includeSources = includeSources;
 	}
 
-	public void setPackageDirectory(String packageDirectory)
+	public String[] getPackageDirectories()
 	{
-		this.packageDirectory = packageDirectory;
+		return packageDirectories;
+	}
+
+	public void setPackageDirectories(String[] packageDirectories)
+	{
+		this.packageDirectories = packageDirectories;
 	}
 
 	public void setSourceDirectory(File sourceDirectory)
@@ -253,15 +308,54 @@ public class GenerateTsMojo extends AbstractMojo
 		{
 			fw = new FileWriter(target);
 			IOUtils.copy(new StringReader(s), fw);
-		}
-		catch (IOException e)
+		} catch (IOException e)
 		{
 			throw new RuntimeException("error", e);
-		}
-		finally
+		} finally
 		{
 			IOUtils.closeQuietly(fw);
 		}
+	}
+
+	public String getGeneratedClassesDirectory()
+	{
+		return generatedClassesDirectory;
+	}
+
+	public void setGeneratedClassesDirectory(String generatedClassesDirectory)
+	{
+		this.generatedClassesDirectory = generatedClassesDirectory;
+	}
+
+	public String getGeneratedProjectTsDirectory()
+	{
+		return generatedProjectTsDirectory;
+	}
+
+	public void setGeneratedProjectTsDirectory(
+			String generatedProjectTsDirectory)
+	{
+		this.generatedProjectTsDirectory = generatedProjectTsDirectory;
+	}
+
+	public String getUseRelativePathInProjectTs()
+	{
+		return useRelativePathInProjectTs;
+	}
+
+	public void setUseRelativePathInProjectTs(String useRelativePathInProjectTs)
+	{
+		this.useRelativePathInProjectTs = useRelativePathInProjectTs;
+	}
+
+	public String getProjectTsFileName()
+	{
+		return projectTsFileName;
+	}
+
+	public void setProjectTsFileName(String projectTsFileName)
+	{
+		this.projectTsFileName = projectTsFileName;
 	}
 
 }

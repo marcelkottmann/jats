@@ -5,14 +5,11 @@ import com.github.pepe79.tsgenerator.descriptor.EnumDescriptor;
 import com.github.pepe79.tsgenerator.descriptor.PropertyDescriptor;
 import com.github.pepe79.tsgenerator.descriptor.TypeDescriptor;
 
-
 public class TypeScriptGenerator
 {
-	
 
-	
-
-	public static String generate(EnumDescriptor descriptor, String containerName)
+	public static String generate(EnumDescriptor descriptor,
+			String containerName)
 	{
 		StringBuffer buffer = new StringBuffer();
 
@@ -49,7 +46,8 @@ public class TypeScriptGenerator
 		return buffer.toString();
 	}
 
-	public static String generate(GenerationContext context, ClassDescriptor descriptor)
+	public static String generate(GenerationContext context,
+			ClassDescriptor descriptor)
 	{
 		StringBuffer buffer = new StringBuffer();
 
@@ -61,19 +59,24 @@ public class TypeScriptGenerator
 			sct.setComponentType(descriptor.getSuperClass());
 			sct.setType(descriptor.getSuperClass());
 			sct.setExtern(true);
-			context.addExternalType(sct.getComponentType(), descriptor.getName());
+			context.addExternalType(sct.getComponentType(),
+					descriptor.getName());
 		}
 
 		for (PropertyDescriptor pd : descriptor.getProperties().values())
 		{
-			if (pd.getType().isExtern() && !descriptor.getEnums().containsKey(pd.getType().getComponentType()))
+			if (pd.getType().isExtern()
+					&& !descriptor.getEnums().containsKey(
+							pd.getType().getComponentType()))
 			{
 				context.addExternalType(pd.getType().getComponentType(), null);
 			}
 
-			if (descriptor.getEnums().containsKey(pd.getType().getComponentType()))
+			if (descriptor.getEnums().containsKey(
+					pd.getType().getComponentType()))
 			{
-				pd.getType().setType(descriptor.getName() + "_" + pd.getType().getType());
+				pd.getType().setType(
+						descriptor.getName() + "_" + pd.getType().getType());
 			}
 		}
 
@@ -98,8 +101,9 @@ public class TypeScriptGenerator
 
 		for (EnumDescriptor enumDescriptor : descriptor.getEnums().values())
 		{
-			buffer.append("\tpublic static " + enumDescriptor.getName() + " = " + descriptor.getName() + "_"
-				+ enumDescriptor.getName() + ";\n\n");
+			buffer.append("\tpublic static " + enumDescriptor.getName() + " = "
+					+ descriptor.getName() + "_" + enumDescriptor.getName()
+					+ ";\n\n");
 		}
 
 		for (PropertyDescriptor pd : descriptor.getProperties().values())
@@ -153,19 +157,20 @@ public class TypeScriptGenerator
 		return buffer.toString();
 	}
 
-	public static String generateReferences(GenerationContext context)
+	public static String generateReferences(String relativePath,
+			GenerationContext context)
 	{
 		StringBuffer buffer = new StringBuffer();
 		for (String type : context.getExternalTypes())
 		{
-			buffer.append(generateReferences(type + ".ts"));
+			buffer.append(generateReferences(relativePath, type + ".ts"));
 		}
 		return buffer.toString();
 	}
 
-	public static String generateReferences(String fileName)
+	public static String generateReferences(String relativePath, String fileName)
 	{
-		return "///<reference path='" + fileName + "' />\n";
+		return "///<reference path='" + relativePath + fileName + "' />\n";
 	}
 
 }
