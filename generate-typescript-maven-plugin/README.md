@@ -15,6 +15,8 @@ generator is that the component types of generic classes can't be extracted from
 
 usage:
 add following snippet to the build-plugins section of your pom.xml 
+<pre>
+
 
 <plugin>
 	<groupId>com.github.pepe79.tsgenerator</groupId>
@@ -64,4 +66,4 @@ add following snippet to the build-plugins section of your pom.xml
 </plugin>
 
 
-
+</pre>
