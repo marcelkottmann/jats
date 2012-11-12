@@ -1,0 +1,1 @@
+This is just a demo model for the demo webapp amd the jats-json tests.

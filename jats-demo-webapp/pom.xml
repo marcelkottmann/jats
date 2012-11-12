@@ -26,7 +26,7 @@
 				<version>0.0.1-SNAPSHOT</version>
 				<configuration>
 					<targetDirectory>src/main/ts</targetDirectory>
-					<sourceDirectory>src/main/java</sourceDirectory>
+					<sourceDirectory>../jats-demo-model/src/main/java</sourceDirectory>
 					
 					<packageDirectories>
 						<packageDirectory>com/github/pepe79/jats/demo/model</packageDirectory>

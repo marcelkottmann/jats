@@ -1,7 +1,7 @@
 package com.github.pepe79.jats.demo;
 
 public class Demo {
-	public static void main(String[] args) {
-
-	}
+	// generate typescript classes with following command:
+	//
+	// mvn generate-typescript-maven-plugin:generate-ts 
 }
