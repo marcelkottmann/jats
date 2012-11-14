@@ -10,7 +10,7 @@ https://github.com/pepe79/jats/tree/master/jats-json
 
 <h2>jats-js</h2>
 Javascript support to integrate jats into the frontend.
-Coming soon
+https://github.com/pepe79/jats/tree/master/jats-js
  
 <h2>jats-json-servlet</h2>
 Servlet support for jats-json.
