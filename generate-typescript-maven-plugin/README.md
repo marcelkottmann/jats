@@ -84,6 +84,6 @@ Start typescript generator with following command
 	mvn generate-typescript-maven-plugin:generate-ts
 </pre>
 
-This plugin can be used together with https://github.com/jstrachan/typescript-maven-plugin , which 
+This plugin can be used together with https://github.com/pepe79/typescript-maven-plugin , which 
 compiles the generated typescript sources to javascript.
  
