@@ -1,0 +1,105 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.github.pepe79</groupId>
+	<artifactId>jats-js</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>jats-js</name>
+	<url>http://maven.apache.org</url>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
+
+
+	<build>
+		<plugins>
+
+			<plugin>
+				<groupId>com.github.pepe79.tsgenerator</groupId>
+				<artifactId>generate-typescript-maven-plugin</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+				<executions>
+					<execution>
+						<phase>generate-sources</phase>
+						<goals>
+							<goal>generate-ts</goal>
+						</goals>
+
+						<configuration>
+							<sourceDirectory>../jats-demo-model/src/main/java</sourceDirectory>
+							<targetDirectory>src/test/ts/demo</targetDirectory>
+
+							<packageDirectories>
+								<packageDirectory>com/github/pepe79/jats/demo/model</packageDirectory>
+							</packageDirectories>
+
+							<!-- Exclude list of simple class names (without package) -->
+							<!-- <excludes> <exclude></exclude> <exclude></exclude> <exclude></exclude> 
+								</excludes> -->
+
+							<!-- Include sources outside of your configured source package -->
+							<!-- <includeSources> <includeSource>package/directory/to/source/Source.java</includeSource> 
+								</includeSources> -->
+
+							<!-- Include compiled classes (dont forget to add the corresponding 
+								jar to the plugin dependencies) -->
+							<!-- <classes> <class>full.qualified.Classname.Here</class> <class>...</class> 
+								</classes> -->
+
+						</configuration>
+					</execution>
+				</executions>
+				<dependencies>
+					<!-- If you have included classes for generation you have to configure 
+						the corresponding jars, where this classes can be found. -->
+					<!-- <dependency> <groupId>...</groupId> <artifactId>...</artifactId> 
+						<version>...</version> </dependency> -->
+				</dependencies>
+			</plugin>
+			<plugin>
+				<groupId>com.ppedregal.typescript</groupId>
+				<artifactId>typescript-maven-plugin</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
+				<executions>
+					<execution>
+						<id>test-compile</id>
+						<phase>test-compile</phase>
+						<goals>
+							<goal>tsc</goal>
+						</goals>
+						<configuration>
+							<sourceDirectory>src/test/ts/demo/project</sourceDirectory>
+							<targetDirectory>target/test-js</targetDirectory>
+						</configuration>
+					</execution>
+					<execution>
+						<id>compile</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>tsc</goal>
+						</goals>
+						<configuration>
+							<sourceDirectory>src/main/ts/jats</sourceDirectory>
+							<targetDirectory>target/js</targetDirectory>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.10</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+</project>
