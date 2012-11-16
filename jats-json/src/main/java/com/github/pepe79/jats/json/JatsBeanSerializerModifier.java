@@ -18,16 +18,14 @@ public class JatsBeanSerializerModifier extends BeanSerializerModifier
 
 	private IdExtractor idExtractor;
 
-	public JatsBeanSerializerModifier(IdExtractor idExtractor,
-			Set<String> propertyWhiteList)
+	public JatsBeanSerializerModifier(IdExtractor idExtractor, Set<String> propertyWhiteList)
 	{
 		this.propertyWhiteList = propertyWhiteList;
 		this.idExtractor = idExtractor;
 	}
 
 	@Override
-	public List<BeanPropertyWriter> changeProperties(
-			SerializationConfig config, BasicBeanDescription beanDesc,
+	public List<BeanPropertyWriter> changeProperties(SerializationConfig config, BasicBeanDescription beanDesc,
 			List<BeanPropertyWriter> beanProperties)
 	{
 		{
@@ -36,8 +34,7 @@ public class JatsBeanSerializerModifier extends BeanSerializerModifier
 			{
 				BeanPropertyWriter bpw = it.next();
 
-				if (propertyWhiteList != null
-						&& !propertyWhiteList.contains(bpw.getName()))
+				if (propertyWhiteList != null && !propertyWhiteList.contains(bpw.getName()))
 				{
 					it.remove();
 				}
@@ -47,11 +44,12 @@ public class JatsBeanSerializerModifier extends BeanSerializerModifier
 		return beanProperties;
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
-	public JsonSerializer<?> modifySerializer(SerializationConfig config,
-			BasicBeanDescription beanDesc, JsonSerializer<?> serializer)
+	public JsonSerializer<Object> modifySerializer(SerializationConfig config, BasicBeanDescription beanDesc,
+			JsonSerializer<?> serializer)
 	{
-		return new JatsJsonSerializer<>(serializer, idExtractor);
+		return new JatsJsonSerializer<Object>((JsonSerializer<Object>) serializer, idExtractor);
 	}
 
 }
