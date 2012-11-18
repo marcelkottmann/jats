@@ -8,7 +8,6 @@ import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.JsonSerializer;
 import org.codehaus.jackson.map.SerializerProvider;
-import org.codehaus.jackson.util.DefaultPrettyPrinter;
 
 import com.github.pepe79.jats.json.idextractor.IdExtractor;
 
