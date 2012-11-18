@@ -7,8 +7,10 @@ import javax.script.ScriptException;
 import junit.framework.Assert;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
+@Ignore
 public class IntegrationTest extends ScriptTest
 {
 
@@ -16,7 +18,7 @@ public class IntegrationTest extends ScriptTest
 	public void setup() throws FileNotFoundException, ScriptException
 	{
 		engine = createScriptEngine(new String[]
-		{ "target/test-classes/underscore.js", "target/js/jats.js", "target/test-js/project.js" });
+		{ "target/test-classes/underscore.js", "target/classes/js/jats.js", "target/test-js/project.js" });
 	}
 
 	@Test

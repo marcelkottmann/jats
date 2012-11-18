@@ -9,26 +9,26 @@
 
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.pepe79</groupId>
-	<artifactId>jats-json</artifactId>
+	<artifactId>jats-servlet</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
-	<name>jats-json</name>
-	<url>http://maven.apache.org</url>
 
-	<build>
-		<finalName>jats-json</finalName>
-	</build>
+	<name>jats-servlet</name>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+	</properties>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.codehaus.jackson</groupId>
-			<artifactId>jackson-mapper-asl</artifactId>
-			<version>1.9.11</version>
+			<groupId>com.github.pepe79</groupId>
+			<artifactId>jats-json</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
-			<groupId>commons-beanutils</groupId>
-			<artifactId>commons-beanutils-core</artifactId>
-			<version>1.8.3</version>
+			<groupId>commons-lang</groupId>
+			<artifactId>commons-lang</artifactId>
+			<version>2.6</version>
 		</dependency>
 		<dependency>
 			<groupId>junit</groupId>
@@ -37,10 +37,12 @@
 			<scope>test</scope>
 		</dependency>
 		<dependency>
-			<groupId>com.github.pepe79</groupId>
-			<artifactId>jats-demo-model</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
-			<scope>test</scope>
+			<groupId>javax.servlet</groupId>
+			<artifactId>servlet-api</artifactId>
+			<version>2.3</version>
+			<scope>provided</scope>
 		</dependency>
+
 	</dependencies>
+
 </project>

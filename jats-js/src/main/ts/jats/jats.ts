@@ -1,14 +1,15 @@
+///<reference path='../lib/jquery.d.ts' />
 ///<reference path='../lib/underscore.d.ts' />
 declare var _ :underscore;
 
 class JATS {
 
-    public static OBJECT_MAP = {}
+    public static OBJECT_MAP = {};
 
-    public static fromJson(obj, objectMap: {}) {
+    public static fromJson(obj, objectMap?: { }) {
 
         if (typeof objectMap === "undefined") {
-            objectMap = OBJECT_MAP;
+            objectMap = JATS.OBJECT_MAP;
         }
 
         if (typeof obj === "undefined") {
@@ -38,11 +39,20 @@ class JATS {
 
             for (var prop in obj) {
                 if (typeof obj[prop] === "object") {
-                    obj[prop] = fromJson(obj[prop], objectMap);
+                    obj[prop] = this.fromJson(obj[prop], objectMap);
                 }
             }
             return obj;
         }
+    }
+
+    public static find(callback: any, type: string, id: any, view?: string) {
+        $.ajax("/jats/" + type + "/" + id + "/" + view, {
+            dataType: "text",
+            success: (data) => {
+                callback(this.fromJson(eval(data)));
+            }
+        });
     }
 
 }

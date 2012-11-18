@@ -3,5 +3,21 @@
  "http://java.sun.com/dtd/web-app_2_3.dtd" >
 
 <web-app>
-  <display-name>Archetype Created Web Application</display-name>
+	<display-name>Archetype Created Web Application</display-name>
+
+	<servlet>
+		<servlet-name>JatsJsonServlet</servlet-name>
+		<servlet-class>com.github.pepe79.jats.servlet.JatsJsonServlet</servlet-class>
+		<init-param>
+			<param-name>repositoryFactoryClass</param-name>
+			<param-value>com.github.pepe79.jats.demo.DemoProductRepositoryFactory</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>JatsJsonServlet</servlet-name>
+		<url-pattern>/jats/*</url-pattern>
+	</servlet-mapping>
+
 </web-app>

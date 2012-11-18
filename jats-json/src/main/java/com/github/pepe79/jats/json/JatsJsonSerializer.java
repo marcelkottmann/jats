@@ -8,6 +8,7 @@ import org.codehaus.jackson.JsonGenerator;
 import org.codehaus.jackson.JsonProcessingException;
 import org.codehaus.jackson.map.JsonSerializer;
 import org.codehaus.jackson.map.SerializerProvider;
+import org.codehaus.jackson.util.DefaultPrettyPrinter;
 
 import com.github.pepe79.jats.json.idextractor.IdExtractor;
 
@@ -20,6 +21,8 @@ public class JatsJsonSerializer<T> extends JsonSerializer<T>
 
 	private Map<Object, Object> idToObjects = new HashMap<Object, Object>();
 
+	private boolean pretty;
+
 	public JatsJsonSerializer(JsonSerializer<T> wrapped, IdExtractor idExtractor)
 	{
 		this.wrapped = wrapped;
@@ -27,14 +30,17 @@ public class JatsJsonSerializer<T> extends JsonSerializer<T>
 	}
 
 	@Override
-	public void serialize(T obj, JsonGenerator generator,
-			SerializerProvider provider) throws IOException,
+	public void serialize(T obj, JsonGenerator generator, SerializerProvider provider) throws IOException,
 			JsonProcessingException
 	{
 		JsonGenerator delegate = generator;
 		if (!(delegate instanceof JatsJsonGenerator))
 		{
 			delegate = new JatsJsonGenerator(generator);
+			if (pretty)
+			{
+				generator.useDefaultPrettyPrinter();
+			}
 		}
 
 		if (wrapped != null)
@@ -62,8 +68,7 @@ public class JatsJsonSerializer<T> extends JsonSerializer<T>
 			}
 			else
 			{
-				((JatsJsonGenerator) delegate).addTypeName(obj.getClass()
-						.getSimpleName());
+				((JatsJsonGenerator) delegate).addTypeName(obj.getClass().getSimpleName());
 				if (id != null)
 				{
 					idToObjects.put(id, obj);
@@ -73,11 +78,20 @@ public class JatsJsonSerializer<T> extends JsonSerializer<T>
 		}
 		else
 		{
-			((JatsJsonGenerator) delegate).addTypeName(obj.getClass()
-					.getSimpleName());
+			((JatsJsonGenerator) delegate).addTypeName(obj.getClass().getSimpleName());
 			delegate.writeStartObject();
 			delegate.writeEndObject();
 		}
+	}
+
+	public boolean isPretty()
+	{
+		return pretty;
+	}
+
+	public void setPretty(boolean pretty)
+	{
+		this.pretty = pretty;
 	}
 
 }

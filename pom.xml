@@ -18,6 +18,7 @@
 		<module>generate-typescript-maven-plugin</module>
 		<module>jats-json</module>
 		<module>jats-js</module>
+		<module>jats-servlet</module>
 		<module>jats-demo-webapp</module>
 	</modules>
 </project>

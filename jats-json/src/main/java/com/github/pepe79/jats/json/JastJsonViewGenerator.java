@@ -24,35 +24,32 @@ public class JastJsonViewGenerator
 		this.views = new HashMap<String, Set<String>>();
 	}
 
-	public JastJsonViewGenerator(IdExtractor idExtractor,
-			Map<String, Set<String>> views)
+	public JastJsonViewGenerator(IdExtractor idExtractor, Map<String, Set<String>> views)
 	{
 		this.idExtractor = idExtractor;
 		this.views = views;
 	}
 
 	@SuppressWarnings("deprecation")
-	public void toJson(Writer writer, Object obj, String viewId)
+	public void toJson(Writer writer, Object obj, String viewId, final boolean pretty)
 	{
 		ObjectMapper mapper = new ObjectMapper();
 
 		// using deprecated methods because their new variants do not work...
 		mapper.getSerializationConfig().disable(Feature.FAIL_ON_EMPTY_BEANS);
-		mapper.getSerializationConfig().setSerializationInclusion(
-				Inclusion.NON_NULL);
+		mapper.getSerializationConfig().setSerializationInclusion(Inclusion.NON_NULL);
 
-		final Set<String> viewProperties = (views == null) ? null : views
-				.get(viewId);
+		final Set<String> viewProperties = (views == null) ? null : views.get(viewId);
 
-		SimpleModule testModule = new SimpleModule("JastModule", new Version(1,
-				0, 0, null))
+		SimpleModule testModule = new SimpleModule("JastModule", new Version(1, 0, 0, null))
 		{
 			@Override
 			public void setupModule(SetupContext context)
 			{
 				super.setupModule(context);
-				context.addBeanSerializerModifier(new JatsBeanSerializerModifier(
-						idExtractor, viewProperties));
+				JatsBeanSerializerModifier modifier = new JatsBeanSerializerModifier(idExtractor, viewProperties);
+				modifier.setPretty(pretty);
+				context.addBeanSerializerModifier(modifier);
 			}
 		};
 
@@ -67,4 +64,5 @@ public class JastJsonViewGenerator
 			throw new RuntimeException("error", e);
 		}
 	}
+
 }

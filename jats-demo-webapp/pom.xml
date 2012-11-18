@@ -1,5 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+	<parent>
+		<groupId>com.github.pepe79</groupId>
+		<artifactId>jats</artifactId>
+		<version>0.0.1-SNAPSHOT</version>
+	</parent>
+
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.github.pepe79</groupId>
 	<artifactId>jats-demo-webapp</artifactId>
@@ -7,15 +14,8 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<name>jats-demo-webapp Maven Webapp</name>
 	<url>http://maven.apache.org</url>
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-			<version>4.10</version>
-			<scope>test</scope>
-		</dependency>
-	</dependencies>
-	
+
+
 	<build>
 		<finalName>jats-demo-webapp</finalName>
 
@@ -27,29 +27,31 @@
 				<executions>
 					<execution>
 						<phase>process-sources</phase>
-						<goals><goal>generate-ts</goal></goals>
-							
+						<goals>
+							<goal>generate-ts</goal>
+						</goals>
+
 						<configuration>
 							<sourceDirectory>../jats-demo-model/src/main/java</sourceDirectory>
 							<targetDirectory>src/main/ts</targetDirectory>
-							
+
 							<packageDirectories>
 								<packageDirectory>com/github/pepe79/jats/demo/model</packageDirectory>
 							</packageDirectories>
-							
+
 							<!-- Exclude list of simple class names (without package) -->
 							<!-- <excludes> <exclude></exclude> <exclude></exclude> <exclude></exclude> 
 								</excludes> -->
-		
+
 							<!-- Include sources outside of your configured source package -->
 							<!-- <includeSources> <includeSource>package/directory/to/source/Source.java</includeSource> 
 								</includeSources> -->
-		
+
 							<!-- Include compiled classes (dont forget to add the corresponding 
 								jar to the plugin dependencies) -->
 							<!-- <classes> <class>full.qualified.Classname.Here</class> <class>...</class> 
 								</classes> -->
-		
+
 						</configuration>
 					</execution>
 				</executions>
@@ -61,22 +63,90 @@
 				</dependencies>
 			</plugin>
 
-	       <plugin>
-	          <groupId>com.ppedregal.typescript</groupId>
-	          <artifactId>typescript-maven-plugin</artifactId>
-	          <version>0.0.1-SNAPSHOT</version>
+			<plugin>
+				<groupId>com.ppedregal.typescript</groupId>
+				<artifactId>typescript-maven-plugin</artifactId>
+				<version>0.0.1-SNAPSHOT</version>
 				<executions>
 					<execution>
 						<phase>process-sources</phase>
-						<goals><goal>tsc</goal></goals>
+						<goals>
+							<goal>tsc</goal>
+						</goals>
 						<configuration>
-							<sourceDirectory>src/main/ts/project</sourceDirectory>
-							<targetDirectory>target/ts</targetDirectory>
+							<sourceDirectory>src/main/ts/demo</sourceDirectory>
+							<targetDirectory>target/jats-demo-webapp/js</targetDirectory>
 						</configuration>
 					</execution>
 				</executions>
-	        </plugin>
-	        
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.5.1</version>
+				<executions>
+					<execution>
+						<id>unpack</id>
+						<phase>prepare-package</phase>
+						<goals>
+							<goal>unpack</goal>
+						</goals>
+						<configuration>
+							<artifactItems>
+								<artifactItem>
+									<groupId>com.github.pepe79</groupId>
+									<artifactId>jats-js</artifactId>
+									<version>0.0.1-SNAPSHOT</version>
+									<type>jar</type>
+									<overWrite>true</overWrite>
+									<outputDirectory>${project.build.directory}/jats-demo-webapp/lib</outputDirectory>
+									<includes>**/*.js</includes>
+								</artifactItem>
+							</artifactItems>
+							<overWriteReleases>false</overWriteReleases>
+							<overWriteSnapshots>true</overWriteSnapshots>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.mortbay.jetty</groupId>
+				<artifactId>jetty-maven-plugin</artifactId>
+				<configuration>
+					<webAppConfig>
+						<contextPath>/</contextPath>
+					</webAppConfig>
+					<webAppSourceDirectory>target/jats-demo-webapp</webAppSourceDirectory>
+					<reload>manual</reload>
+				</configuration>
+			</plugin>
+
 		</plugins>
 	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>com.github.pepe79</groupId>
+			<artifactId>jats-js</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.pepe79</groupId>
+			<artifactId>jats-servlet</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.pepe79</groupId>
+			<artifactId>jats-demo-model</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.10</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
 </project>

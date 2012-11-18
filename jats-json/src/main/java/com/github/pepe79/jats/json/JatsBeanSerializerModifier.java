@@ -18,6 +18,8 @@ public class JatsBeanSerializerModifier extends BeanSerializerModifier
 
 	private IdExtractor idExtractor;
 
+	private boolean pretty;
+
 	public JatsBeanSerializerModifier(IdExtractor idExtractor, Set<String> propertyWhiteList)
 	{
 		this.propertyWhiteList = propertyWhiteList;
@@ -49,7 +51,20 @@ public class JatsBeanSerializerModifier extends BeanSerializerModifier
 	public JsonSerializer<Object> modifySerializer(SerializationConfig config, BasicBeanDescription beanDesc,
 			JsonSerializer<?> serializer)
 	{
-		return new JatsJsonSerializer<Object>((JsonSerializer<Object>) serializer, idExtractor);
+		JatsJsonSerializer<Object> jatsSerializer = new JatsJsonSerializer<Object>((JsonSerializer<Object>) serializer,
+				idExtractor);
+		jatsSerializer.setPretty(pretty);
+		return jatsSerializer;
+	}
+
+	public boolean isPretty()
+	{
+		return pretty;
+	}
+
+	public void setPretty(boolean pretty)
+	{
+		this.pretty = pretty;
 	}
 
 }

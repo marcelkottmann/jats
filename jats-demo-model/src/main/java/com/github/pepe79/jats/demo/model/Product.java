@@ -5,15 +5,17 @@ import java.util.List;
 public class Product
 {
 	private int id;
+	
+	private String label; 
 
-	private List<ProductVariant> variants;
+	private List<Component> variants;
 
-	public List<ProductVariant> getVariants()
+	public List<Component> getVariants()
 	{
 		return variants;
 	}
 
-	public void setVariants(List<ProductVariant> variants)
+	public void setVariants(List<Component> variants)
 	{
 		this.variants = variants;
 	}
@@ -28,4 +30,15 @@ public class Product
 		this.id = id;
 	}
 
+	public String getLabel()
+	{
+		return label;
+	}
+
+	public void setLabel(String label)
+	{
+		this.label = label;
+	}
+
+	
 }
