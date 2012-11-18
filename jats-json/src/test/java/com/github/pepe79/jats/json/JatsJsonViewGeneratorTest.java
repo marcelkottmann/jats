@@ -1,66 +1,14 @@
 package com.github.pepe79.jats.json;
 
 import java.io.StringWriter;
-import java.util.ArrayList;
 
-import junit.framework.Assert;
-
-import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
-import com.github.pepe79.jats.demo.model.Component;
-import com.github.pepe79.jats.demo.model.Product;
-import com.github.pepe79.jats.demo.model.Uom;
 import com.github.pepe79.jats.json.idextractor.BeanPropertyIdExtractor;
-import com.github.pepe79.jats.json.idextractor.IdExtractor;
 
-@Ignore
 public class JatsJsonViewGeneratorTest
 {
 
-	private Product testObject;
-
-	@Before
-	public void setup()
-	{
-		int id = 0;
-
-		testObject = new Product();
-		testObject.setId(id++);
-		testObject.setVariants(new ArrayList<Component>());
-
-		Uom uom = new Uom();
-		uom.setId(id++);
-		uom.setCode("LARGE");
-
-		Component v1 = new Component();
-		v1.setId(id++);
-
-		// cyclic reference
-		// v1.setMainProduct(testObject);
-
-		testObject.getVariants().add(v1);
-	}
-
-	@Test
-	public void testToJson()
-	{
-		// create id extractor for product
-		IdExtractor idExtractor = new BeanPropertyIdExtractor("id", true);
-
-		JastJsonViewGenerator viewGenerator = new JastJsonViewGenerator(idExtractor, null);
-
-		StringWriter sw = new StringWriter();
-		viewGenerator.toJson(sw, testObject, null, false);
-
-		String result = sw.toString();
-		System.out.println(result);
-
-		Assert.assertEquals(
-				"{\"jatsType\":Product,\"id\":0,\"variants\":[{\"jatsType\":ProductVariant,\"id\":2,\"mainProduct\":{\"$ref\":\"0\"},\"uom\":{\"jatsType\":Uom,\"id\":1,\"code\":\"LARGE\"}}]}",
-				result);
-	}
 
 	public class SimpleObject
 	{
