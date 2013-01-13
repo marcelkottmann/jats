@@ -1,0 +1,31 @@
+<html>
+<body>
+	<script type="text/javascript" src="/lib/js/purest.js"></script>
+	<script type="text/javascript" src="/lib/js/underscore.js"></script>
+	<script type="text/javascript" src="/lib/js/jquery-1.8.3.js"></script>
+	<script type="text/javascript" src="/lib/js/jats.js"></script>
+	<script type="text/javascript" src="/js/demo.js"></script>
+
+	<script type="text/javascript">
+		CacheManager.init();
+		CacheManager.load(function() {
+			renderProduct(CacheManager.getObject(1));
+		});
+	</script>
+
+	<div class="template">
+		Product label: <span id="label">Product label</span> Variants:
+		<ul>
+			<li><span class="variantLabel">Variant label</span>
+
+				<ul>
+					<li><span class="modifierLabel">Modifier</span>
+						<ul>
+							<li><span class="modifierEntry">ModifierEntry</span></li>
+						</ul></li>
+				</ul></li>
+		</ul>
+	</div>
+
+</body>
+</html>

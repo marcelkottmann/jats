@@ -6,6 +6,10 @@ class JATS {
 
     public static OBJECT_MAP = {};
 
+    public static init(objectMap: { }) {
+        JATS.OBJECT_MAP = objectMap;
+    }
+
     public static fromJson(obj, objectMap?: { }) {
 
         if (typeof objectMap === "undefined") {

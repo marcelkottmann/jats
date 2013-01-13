@@ -22,8 +22,10 @@ public class DemoProductRepository implements Repository<Product>
 		p.setLabel("Demo product");
 
 		Component variant = new Component();
+		Component variant2 = new Component();
 		p.setVariants(new ArrayList<Component>());
 		p.getVariants().add(variant);
+		p.getVariants().add(variant2);
 
 		variant.setId(idGen.nextId());
 		variant.setLabel("Product variant 1");
@@ -32,6 +34,11 @@ public class DemoProductRepository implements Repository<Product>
 		modifiers.add(createModifier(3, "Yellow modifier", 2, 2, idGen));
 		modifiers.add(createModifier(5, "Blue modifier", 0, 0, idGen));
 		variant.setModifiers(modifiers);
+		variant.setRequiredComponents(new ArrayList<Component>());
+		variant.setOptionalComponents(new ArrayList<Component>());
+
+		variant2.setId(idGen.nextId());
+		variant2.setLabel("Product variant 2");
 
 		return p;
 	}
