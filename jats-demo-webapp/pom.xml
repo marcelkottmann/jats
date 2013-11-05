@@ -120,6 +120,8 @@
 					</webAppConfig>
 					<webAppSourceDirectory>target/jats-demo-webapp</webAppSourceDirectory>
 					<reload>manual</reload>
+					<stopKey>foo</stopKey>
+					<stopPort>9999</stopPort>
 				</configuration>
 			</plugin>
 

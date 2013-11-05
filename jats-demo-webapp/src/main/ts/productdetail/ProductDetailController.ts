@@ -1,19 +1,24 @@
 class ProductDetailController {
 
-    public static compositionManager:CompositionManager ;
+    public static compositionManager: CompositionManager;
 
-    public static product:Product;
+    public static product: Product;
 
-    public static composition:Composition;
+    public static composition: Composition;
 
     public static init() {
         CacheManager.init();
-        CacheManager.load(function () {
+        CacheManager.load(function() {
             compositionManager = new CompositionManager(new CompositionConfigurator());
             product = CacheManager.getObject(1);
             composition = compositionManager.createDefaultComposition(product.getVariants()[0], null);
-            alert(composition.toString());
+            ProductDetailController.reRender();
         });
+    }
+
+    public static reRender() {
+        renderProduct(product, ProductDetailController.composition);
+        renderComposition(ProductDetailController.composition);
     }
 
 

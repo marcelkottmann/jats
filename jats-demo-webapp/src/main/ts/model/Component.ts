@@ -1,5 +1,7 @@
 class Component
 {
+	private price : number;
+
 	private requiredComponents : Component[];
 
 	private optionalComponents : Component[];
@@ -11,6 +13,9 @@ class Component
 	private label : string;
 
 	private quantity : Quantity;
+
+	public getPrice() { return this.price; }
+	public setPrice( price : number ) { this.price = price; }
 
 	public getRequiredComponents() { return this.requiredComponents; }
 	public setRequiredComponents( requiredComponents : Component[] ) { this.requiredComponents = requiredComponents; }

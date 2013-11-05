@@ -1,17 +1,21 @@
 class Composition {
 
-    private componentId: number = 0;
+    private component: Component = null;
 
     private quantity: number = 0;
 
     private subComponents: Composition[] = new Array();
 
-    constructor (componentId : number) {
-        this.componentId = componentId;
+    constructor(component: Component) {
+        this.component = component;
     }
 
     public getComponentId() {
-        return this.componentId;
+        return this.component.getId();
+    }
+
+    public getComponent() {
+        return this.component;
     }
 
     public getSubComponents(): Composition[] {
@@ -26,10 +30,21 @@ class Composition {
         this.quantity = quantity;
     }
 
+    public getPrice(): number {
+        var p: number = this.getQuantity() * this.getComponent().getPrice();
+        this.subComponents.forEach(subc => {
+            p += this.getQuantity() * subc.getPrice();
+        });
+        return p;
+    }
+
     public toString(): string {
-        var str = this.quantity + "x" + this.componentId + "[";
+        var str = this.quantity + "x" + this.getComponentId() + "[";
         for (var i = 0; i < this.subComponents.length; i++) {
             str = str + this.subComponents[i].toString();
+            if (i < this.subComponents.length - 1) {
+                str += ",";
+            }
         }
         str = str + "]";
         return str;

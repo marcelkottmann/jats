@@ -19,31 +19,40 @@ public class DemoProductRepository implements Repository<Product>
 
 		Product p = new Product();
 		p.setId(idGen.nextId());
-		p.setLabel("Demo product");
+		p.setLabel("Pizza Hawaii");
 
 		Component variant = new Component();
-		Component variant2 = new Component();
 		p.setVariants(new ArrayList<Component>());
 		p.getVariants().add(variant);
-		p.getVariants().add(variant2);
 
 		variant.setId(idGen.nextId());
-		variant.setLabel("Product variant 1");
+		variant.setLabel("Pizza Hawaii Groß");
+		variant.setPrice(5.50f);
 
 		List<Modifier> modifiers = new ArrayList<Modifier>();
-		modifiers.add(createModifier(3, "Yellow modifier", 2, 2, idGen));
-		modifiers.add(createModifier(5, "Blue modifier", 0, 0, idGen));
+		modifiers.add(createModifier("Niederwertige Zutaten", 0, 3, idGen,
+				0.5f, "Peperoni", "Champignons", "Tomaten", "Paprika", "Käse"));
+		modifiers.add(createModifier("Höherwertige Zutaten", 0, 1, idGen,
+				0.75f, "Scampi", "Rinderstreifen", "Thunfisch"));
 		variant.setModifiers(modifiers);
-		variant.setRequiredComponents(new ArrayList<Component>());
-		variant.setOptionalComponents(new ArrayList<Component>());
 
-		variant2.setId(idGen.nextId());
-		variant2.setLabel("Product variant 2");
+		variant.setRequiredComponents(new ArrayList<Component>());
+		Component requiredComponent = new Component();
+		requiredComponent.setId(idGen.nextId());
+		requiredComponent.setLabel("Teig");
+		variant.getRequiredComponents().add(requiredComponent);
+
+		variant.setOptionalComponents(new ArrayList<Component>());
+		Component optionalComponent = new Component();
+		optionalComponent.setId(idGen.nextId());
+		optionalComponent.setLabel("Würzige Tomatensauce");
+		variant.getOptionalComponents().add(optionalComponent);
 
 		return p;
 	}
 
-	private Modifier createModifier(int num, String baseLabel, int min, int max, IdGenerator idGen)
+	private Modifier createModifier(String baseLabel, int min, int max,
+			IdGenerator idGen, float price, String... labels)
 	{
 		Modifier m = new Modifier();
 		m.setId(idGen.nextId());
@@ -51,11 +60,11 @@ public class DemoProductRepository implements Repository<Product>
 		m.setMax(max);
 
 		List<ModifierEntry> modifierEntries = new ArrayList<ModifierEntry>();
-		for (int i = 0; i < num; i++)
+		for (String label : labels)
 		{
 			ModifierEntry e = new ModifierEntry();
 			e.setId(idGen.nextId());
-			e.setComponent(createSimpleComponent(baseLabel + " " + (i + 1), idGen));
+			e.setComponent(createSimpleComponent(label, idGen, price));
 			modifierEntries.add(e);
 		}
 		m.setModifierEntries(modifierEntries);
@@ -63,11 +72,13 @@ public class DemoProductRepository implements Repository<Product>
 		return m;
 	}
 
-	private Component createSimpleComponent(String label, IdGenerator idGen)
+	private Component createSimpleComponent(String label, IdGenerator idGen,
+			float price)
 	{
 		Component component = new Component();
 		component.setId(idGen.nextId());
 		component.setLabel(label);
+		component.setPrice(price);
 		return component;
 	}
 

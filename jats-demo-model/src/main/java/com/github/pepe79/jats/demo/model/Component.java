@@ -8,6 +8,8 @@ public class Component
 
 	private String label;
 
+	private float price;
+
 	private List<Component> requiredComponents;
 
 	private List<Component> optionalComponents;
@@ -15,6 +17,16 @@ public class Component
 	private List<Modifier> modifiers;
 
 	private Quantity quantity;
+
+	public float getPrice()
+	{
+		return price;
+	}
+
+	public void setPrice(float price)
+	{
+		this.price = price;
+	}
 
 	public List<Component> getRequiredComponents()
 	{
