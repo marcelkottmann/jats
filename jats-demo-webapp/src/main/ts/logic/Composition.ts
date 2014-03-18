@@ -4,7 +4,7 @@ class Composition {
 
     private quantity: number = 0;
 
-    private subComponents: Composition[] = new Array();
+    private subComponents: Composition[] = [];
 
     constructor(component: Component) {
         this.component = component;

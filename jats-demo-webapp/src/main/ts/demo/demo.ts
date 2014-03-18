@@ -12,7 +12,7 @@ class CacheManager {
     public static objectsMap = {};
 
     public static init() {
-        JATS.init(objectsMap);
+        JATS.init(CacheManager.objectsMap);
     }
 
     public static load(success: () => any) {
@@ -27,7 +27,7 @@ class CacheManager {
 
     public static getObject(id: number) {
         console.log("Getting object with id " + id);
-        var ret = objectsMap[id];
+        var ret = CacheManager.objectsMap[id];
         console.log("Returning " + ret);
         return ret;
     }

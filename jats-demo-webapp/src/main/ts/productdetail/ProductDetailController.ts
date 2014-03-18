@@ -9,15 +9,15 @@ class ProductDetailController {
     public static init() {
         CacheManager.init();
         CacheManager.load(function() {
-            compositionManager = new CompositionManager(new CompositionConfigurator());
-            product = CacheManager.getObject(1);
-            composition = compositionManager.createDefaultComposition(product.getVariants()[0], null);
+            ProductDetailController.compositionManager = new CompositionManager(new CompositionConfigurator());
+            ProductDetailController.product = CacheManager.getObject(1);
+            ProductDetailController.composition = ProductDetailController.compositionManager.createDefaultComposition(ProductDetailController.product.getVariants()[0], null);
             ProductDetailController.reRender();
         });
     }
 
     public static reRender() {
-        renderProduct(product, ProductDetailController.composition);
+        renderProduct(ProductDetailController.product, ProductDetailController.composition);
         renderComposition(ProductDetailController.composition);
     }
 
