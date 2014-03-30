@@ -63,6 +63,8 @@ public class JatsJsonSerializer<T> extends JsonSerializer<T>
 				delegate.writeStartObject();
 				delegate.writeFieldName("$ref");
 				delegate.writeString(id.toString());
+				delegate.writeFieldName("$type");
+				delegate.writeString(reference.getClass().getSimpleName());
 				delegate.writeEndObject();
 			}
 			else

@@ -16,19 +16,84 @@
 	<url>http://maven.apache.org</url>
 
 
+
+	<profiles>
+		<profile>
+			<id>default</id>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.ppedregal.typescript</groupId>
+						<artifactId>typescript-maven-plugin</artifactId>
+						<version>0.0.1-SNAPSHOT</version>
+						<executions>
+							<execution>
+								<phase>process-sources</phase>
+								<goals>
+									<goal>tsc</goal>
+								</goals>
+								<configuration>
+									<sourceDirectory>src/main/ts/demo</sourceDirectory>
+									<targetDirectory>target/jats-demo-webapp/js</targetDirectory>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>fast</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>com.ppedregal.typescript</groupId>
+						<artifactId>typescript-maven-plugin</artifactId>
+						<executions>
+							<execution>
+								<phase>process-sources</phase>
+								<goals>
+								</goals>
+							</execution>
+							<execution>
+								<id>compile</id>
+								<goals></goals>
+								<phase>compile</phase>
+							</execution>
+							<execution>
+								<id>test-compile</id>
+								<goals></goals>
+								<phase>test-compile</phase>
+							</execution>
+							<execution>
+								<id>process-resources</id>
+								<goals>
+								</goals>
+								<phase>process-resources</phase>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
 	<build>
 		<finalName>jats-demo-webapp</finalName>
 
 		<plugins>
 			<plugin>
-		        <groupId>org.apache.maven.plugins</groupId>
-		        <artifactId>maven-compiler-plugin</artifactId>
-		        <version>3.1</version>
-		        <configuration>
-		          <source>1.6</source>
-		          <target>1.6</target>
-		        </configuration>
-		    </plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.6</source>
+					<target>1.6</target>
+				</configuration>
+			</plugin>
 			<plugin>
 				<groupId>com.github.pepe79.tsgenerator</groupId>
 				<artifactId>generate-typescript-maven-plugin</artifactId>
@@ -72,23 +137,6 @@
 				</dependencies>
 			</plugin>
 
-			<plugin>
-				<groupId>com.ppedregal.typescript</groupId>
-				<artifactId>typescript-maven-plugin</artifactId>
-				<version>0.0.1-SNAPSHOT</version>
-				<executions>
-					<execution>
-						<phase>process-sources</phase>
-						<goals>
-							<goal>tsc</goal>
-						</goals>
-						<configuration>
-							<sourceDirectory>src/main/ts/demo</sourceDirectory>
-							<targetDirectory>target/jats-demo-webapp/js</targetDirectory>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -136,6 +184,8 @@
 
 		</plugins>
 	</build>
+
+
 
 	<dependencies>
 		<dependency>

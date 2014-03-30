@@ -29,7 +29,7 @@ public class IntegrationTest extends ScriptTest
 	@Test
 	public void testFromJsonReference() throws FileNotFoundException, ScriptException
 	{
-		engine.eval("var product=JATS.fromJson({id:1, jatsType:Product})");
-		Assert.assertTrue((Boolean) engine.eval("product.getId()===1"));
+		engine.eval("var component=JATS.fromJson({id:1, $type:'Component'})");
+		Assert.assertTrue((Boolean) engine.eval("component.getId()===1"));
 	}
 }

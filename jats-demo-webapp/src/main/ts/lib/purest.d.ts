@@ -1,4 +1,4 @@
 interface PUREST {
-    render(selector: string, directive, target?: string);
+    render(selector: string, directive: any, target?: string): void;
 }
 declare var PUREST: PUREST;

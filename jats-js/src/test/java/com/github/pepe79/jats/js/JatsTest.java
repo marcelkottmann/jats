@@ -60,7 +60,7 @@ public class JatsTest extends ScriptTest
 	public void testFromJsonReferenceJatsType() throws FileNotFoundException, ScriptException
 	{
 		engine.eval("var MyType=(function(){function MyType() { }; MyType.prototype.getId = function () { return this.id; }; return MyType })()");
-		engine.eval("var obj=JATS.fromJson({id:1, jatsType:MyType, me:{$ref:'1'}})");
+		engine.eval("var obj=JATS.fromJson({id:1, $type:'MyType', me:{$ref:'1', $type:'MyType'}})");
 		Assert.assertTrue((Boolean) engine.eval("obj.me===obj"));
 		Assert.assertTrue((Boolean) engine.eval("obj.getId()===1"));
 	}

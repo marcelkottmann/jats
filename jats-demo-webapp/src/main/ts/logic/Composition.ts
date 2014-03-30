@@ -2,12 +2,15 @@ class Composition {
 
     private component: Component = null;
 
+    private uom: Uom = null;
+
     private quantity: number = 0;
 
     private subComponents: Composition[] = [];
 
-    constructor(component: Component) {
+    constructor(component: Component, uom: Uom) {
         this.component = component;
+        this.uom = uom;
     }
 
     public getComponentId() {
@@ -16,6 +19,10 @@ class Composition {
 
     public getComponent() {
         return this.component;
+    }
+
+    public getUom() {
+        return this.uom;
     }
 
     public getSubComponents(): Composition[] {
@@ -30,13 +37,17 @@ class Composition {
         this.quantity = quantity;
     }
 
-    public getPrice(): number {
-        var p: number = this.getQuantity() * this.getComponent().getPrice();
+    public getPrice(q?: number): number {
+        var compontPrice = PriceManager.findPrice(this.component, this.uom);
+        q = (q == null ? this.getQuantity() : q);
+        var p: number = q * compontPrice;
         this.subComponents.forEach(subc => {
-            p += this.getQuantity() * subc.getPrice();
+            var includedQuantity = CompositionConfigurator.getIncludedQuantity(this.component, subc.getComponentId());
+            p += q * subc.getPrice(Math.max(0, subc.getQuantity() - includedQuantity));
         });
         return p;
     }
+
 
     public toString(): string {
         var str = this.quantity + "x" + this.getComponentId() + "[";

@@ -47,49 +47,49 @@ li {
 	<script type="text/javascript" src="/lib/js/jats.js"></script>
 	<script type="text/javascript" src="/js/demo.js"></script>
 
+	<p class="navi">
+		<a data-productid="0"
+			onclick="ProductDetailController.loadProduct($(this).data('productid'));">Produkt
+			Label</a>
+	</p>
 
-	<div class="template">
-		Product label: <span id="label">Product label</span>
-		<ul>
-			<li><span class="variantLabel">Variant label</span> <span
-				class="priceWrapper"><span class="price">xx,xx</span></span><span
-				class="actions">
-					<button data-id="" data-q="1" class="js_add">+</button>
-					<button data-id="" data-q="-1" class="js_add">-</button>
-			</span>
-				<ul id="required">
-					<li><span>Required components</span>
-						<ul>
-							<li><span>RequiredComponent</span></li>
-						</ul></li>
-				</ul>
-
-				<ul id="optional">
-					<li><span>Optional components</span>
-						<ul>
-							<li><span>OptionalComponent</span><span class="priceWrapper"><span
-									class="price">xx,xx</span></span> <span class="actions">
-									<button data-id="" data-q="1" class="js_add">+</button>
-									<button data-id="" data-q="-1" class="js_add">-</button>
-							</span></li>
-						</ul></li>
-				</ul>
-
-				<ul id="modifiers">
-					<li><span class="modifierLabel">Modifier</span>
-						<ul>
-							<li><span class="modifierEntry">ModifierEntry</span> <span
-								class="priceWrapper"><span class="price">xx,xx</span></span><span
-								class="actions">
-									<button data-id="" data-q="1" class="js_add">+</button>
-									<button data-id="" data-q="-1" class="js_add">-</button>
-							</span></li>
-						</ul></li>
+	<div class="template" style="display: none">
+		<p>
+			Product label: <span id="label">Product label</span>
+		</p>
+		<p id="variants">
+			Variants: <select
+				onchange="ProductDetailController.loadProduct(this.options[this.selectedIndex].value);">
+				<option value=""></option>
+			</select>
+		</p>
+		<ul id="variantValues">
+			<li><span>Variant value label</span> <select
+				class="variantValueSelect">
+					<option value=""></option>
+			</select></li>
+		</ul>
+		<span class="variantLabel">Variant label</span> <span
+			class="priceWrapper"><span class="price">xx,xx</span></span><span
+			class="actions">
+			<button data-id="" data-type="" data-q="1" class="js_add">+</button>
+			<button data-id="" data-type="" data-q="-1" class="js_add">-</button>
+		</span>
+		<ul id="modifiers">
+			<li><span class="modifierLabel">Modifier</span>
+				<ul>
+					<li><span class="modifierEntry">ModifierEntry</span> <span
+						class="priceWrapper"><span class="price">xx,xx</span></span><span
+						class="actions">
+							<button data-id="" data-type="" data-q="1" class="js_add">+</button>
+							<button data-id="" data-type="" data-q="-1" class="js_add">-</button>
+					</span></li>
 				</ul></li>
 		</ul>
 	</div>
+	<div class="configurator"></div>
 
-	<div class="ctemplate">
+	<div class="ctemplate" style="display: none">
 		<div>
 			<span id="cquantity">0</span>x <span id="clabel">Label</span> <span
 				class="priceWrapper"><span id="pprice">xx,xx</span></span>
@@ -102,23 +102,34 @@ li {
 			<b>Gesamt:</b> <span class="priceWrapper"><span id="cprice">xx,xx</span></span>
 		</div>
 	</div>
+	<div class="summary"></div>
 
 
 	<script type="text/javascript">
 		ProductDetailController.init();
-		$(document)
-				.on(
-						"click",
-						".js_add:not(.disabled)",
-						function(e) {
-							var id = $(e.target).data("id");
-							var q = $(e.target).data("q");
-							var newq = ProductDetailController.compositionManager.compositionConfigurator
-									.addComponent(
-											ProductDetailController.composition,
-											CacheManager.getObject(id), q);
-							ProductDetailController.reRender();
-						});
+		$(document).on("click", ".js_add:not(.disabled)", function(e) {
+			var id = $(e.target).data("id");
+			var type = $(e.target).data("type");
+			var q = $(e.target).data("q");
+			ProductDetailController.add(type, id, q);
+		});
+
+		$(document).on(
+				"change",
+				".variantValueSelect",
+				function(e) {
+					var vvalues = new Array();
+					$(".configurator #variantValues option:selected").each(
+							function(v, e) {
+								vvalues.push($(e).val());
+							});
+					var variant = ProductDetailController.getVariant(vvalues);
+					if (variant == null) {
+						alert("no variant available");
+					} else {
+						ProductDetailController.setProduct(variant);
+					}
+				});
 	</script>
 
 </body>

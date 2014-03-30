@@ -1,10 +1,12 @@
 class Component
 {
-	private price : number;
+	private variantValueList : VariantValueList[];
 
-	private requiredComponents : Component[];
+	private variantValues : any[];
 
-	private optionalComponents : Component[];
+	private variants : Component[];
+
+	private variantAttributes : VariantAttribute[];
 
 	private modifiers : Modifier[];
 
@@ -12,16 +14,17 @@ class Component
 
 	private label : string;
 
-	private quantity : Quantity;
+	private custom : {};
 
-	public getPrice() { return this.price; }
-	public setPrice( price : number ) { this.price = price; }
+	public getVariantValueList() { return this.variantValueList; }
 
-	public getRequiredComponents() { return this.requiredComponents; }
-	public setRequiredComponents( requiredComponents : Component[] ) { this.requiredComponents = requiredComponents; }
+	public getVariantValues() { return this.variantValues; }
 
-	public getOptionalComponents() { return this.optionalComponents; }
-	public setOptionalComponents( optionalComponents : Component[] ) { this.optionalComponents = optionalComponents; }
+	public getVariants() { return this.variants; }
+	public setVariants( variants : Component[] ) { this.variants = variants; }
+
+	public getVariantAttributes() { return this.variantAttributes; }
+	public setVariantAttributes( variantAttributes : VariantAttribute[] ) { this.variantAttributes = variantAttributes; }
 
 	public getModifiers() { return this.modifiers; }
 	public setModifiers( modifiers : Modifier[] ) { this.modifiers = modifiers; }
@@ -32,8 +35,7 @@ class Component
 	public getLabel() { return this.label; }
 	public setLabel( label : string ) { this.label = label; }
 
-	public getQuantity() { return this.quantity; }
-	public setQuantity( quantity : Quantity ) { this.quantity = quantity; }
+	public getCustom() { return this.custom; }
 
 
 }

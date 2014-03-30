@@ -10,7 +10,11 @@
 		<servlet-class>com.github.pepe79.jats.servlet.JatsJsonServlet</servlet-class>
 		<init-param>
 			<param-name>repositoryFactoryClass</param-name>
-			<param-value>com.github.pepe79.jats.demo.DemoProductRepositoryFactory</param-value>
+			<param-value>com.github.pepe79.jats.demo.repository.DemoProductRepositoryFactory</param-value>
+		</init-param>
+		<init-param>
+			<param-name>viewFactoryClass</param-name>
+			<param-value>com.github.pepe79.jats.demo.view.DemoViewFactory</param-value>
 		</init-param>
 		<load-on-startup>1</load-on-startup>
 	</servlet>

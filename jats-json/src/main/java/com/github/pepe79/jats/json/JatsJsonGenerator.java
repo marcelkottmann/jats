@@ -48,8 +48,8 @@ public class JatsJsonGenerator extends JsonGeneratorDelegate
 	private void writeType(String typeName) throws JsonGenerationException,
 			IOException
 	{
-		writeFieldName("jatsType");
-		writeRawValue(typeName);
+		writeFieldName("$type");
+		writeString(typeName);
 	}
 
 }

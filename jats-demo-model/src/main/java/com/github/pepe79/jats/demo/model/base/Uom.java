@@ -1,4 +1,4 @@
-package com.github.pepe79.jats.demo.model;
+package com.github.pepe79.jats.demo.model.base;
 
 public class Uom
 {

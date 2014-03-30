@@ -10,7 +10,6 @@ import java.beans.Introspector;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -31,7 +30,7 @@ public class BeanInfoExtractor extends VoidVisitorAdapter<ClassDescriptor>
 
 	private Map<String, EnumDescriptor> innerEnums = new LinkedHashMap<String, EnumDescriptor>();
 
-	private static final Map<String, String> TYPEMAPPER = Collections.unmodifiableMap(new HashMap<String, String>()
+	private static final Map<String, String> TYPEMAPPER = Collections.unmodifiableMap(new LinkedHashMap<String, String>()
 	{
 		{
 			put("Object", TypeDescriptor.ANY);
@@ -51,6 +50,7 @@ public class BeanInfoExtractor extends VoidVisitorAdapter<ClassDescriptor>
 			put("boolean", TypeDescriptor.BOOL);
 
 			put("List", TypeDescriptor.ANY_ARRAY);
+			put("List<List<(.*)>>", TypeDescriptor.ARRAY_OF_ARRAY);
 			put("List<(.*)>", TypeDescriptor.ARRAY);
 			put("Map<(.*)>", TypeDescriptor.MAP);
 

@@ -5,5 +5,5 @@ import java.util.Set;
 
 public interface ViewFactory
 {
-	Map<String, Set<String>> createViews();
+	Map<String, Map<Class<?>, Set<String>>> createViews();
 }

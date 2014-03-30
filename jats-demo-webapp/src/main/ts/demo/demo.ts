@@ -4,97 +4,78 @@
 ///<reference path='../logic/Composition.ts' />
 ///<reference path='../logic/CompositionManager.ts' />
 ///<reference path='../logic/CompositionConfigurator.ts' />
+///<reference path='../logic/PriceManager.ts' />
 ///<reference path='../productdetail/ProductDetailController.ts' />
 
 
-class CacheManager {
+function renderProduct(product: Component, composition: Composition) {
 
-    public static objectsMap = {};
-
-    public static init() {
-        JATS.init(CacheManager.objectsMap);
-    }
-
-    public static load(success: () => any) {
-        JATS.find(function(objects: Product[]) {
-            for (var i = 0; i < objects.length; i++) {
-                console.log("Accepting product with id " + objects[i].getId());
-            }
-            success();
-        }, "products", 0, "product");
-
-    }
-
-    public static getObject(id: number) {
-        console.log("Getting object with id " + id);
-        var ret = CacheManager.objectsMap[id];
-        console.log("Returning " + ret);
-        return ret;
-    }
-}
-
-function renderProduct(product: Product, composition: Composition) {
-    var directive = function(product: Product) {
+    var directive = function(product: Component) {
 		return {
-            '#label': product.getLabel(),
-            'li': {
+            '@style': '',
+            '#label': product.getId(),
+            'p#variants option': {
                 items: product.getVariants(),
                 each: function(variant: Component) {
-				    return {
-                        ".variantLabel": variant.getLabel(),
-                        ".price": formatPrice(variant.getPrice()),
-                        ".actions button:nth-child(1)@data-id": variant.getId(),
-                        ".actions button:nth-child(2)@data-id": variant.getId(),
-                        "ul#required li ul li": {
-                            items: variant.getRequiredComponents(),
-                            each: (component: Component) => {
+                    return {
+                        "": variant.getLabel() + " (" + variant.getVariantValues().join(", ") + ")",
+                        "@value": variant.getId(),
+                        "@selected": { add: product.getId() == variant.getId(), "value": "selected" }
+                    }
+                }
+            },
+            "ul#variantvalues li": {
+                items: product.getVariantValueList(),
+                each: function(variantValueList: VariantValueList, status: { index: number; length: number }) {
+                    return {
+                        "span": variantValueList.getVariantAttribute().getLabel(),
+                        "option": {
+                            items: variantValueList.getVariantValues(),
+                            each: function(variantValue: VariantValue) {
                                 return {
-                                    "span": component.getLabel(),
-                                    ".price": formatPrice(component.getPrice()),
-                                    "button:nth-child(1)@data-id": component.getId(),
-                                    "button:nth-child(2)@data-id": component.getId()
-                                }
-                        }
-                        },
-                        "ul#optional li ul li": {
-                            items: variant.getOptionalComponents(),
-                            each: (component: Component) => {
-                                return {
-                                    "span": component.getLabel(),
-                                    ".price": formatPrice(component.getPrice()),
-                                    "button:nth-child(1)@data-id": component.getId(),
-                                    "button:nth-child(2)@data-id": component.getId(),
-                                    "button:nth-child(2)@class": "js_add " + (ProductDetailController.compositionManager.getConfigurator().canreduce(composition, component.getId()) ? "" : " disabled")
-                                }
-                            }
-                        },
-                        "ul#modifiers li": {
-                            items: variant.getModifiers(),
-                            each: (modifier: Modifier) => {
-                                return {
-                                    ".modifierLabel": "Modifier (max="+ modifier.getMax() + ")",
-                                    "ul li": {
-                                        items: modifier.getModifierEntries(),
-                                        each: (modifierEntry: ModifierEntry) => {
-                                            return {
-                                                "span": modifierEntry.getComponent().getLabel(),
-                                                ".price": formatPrice(modifierEntry.getComponent().getPrice()),
-                                                "button:nth-child(1)@data-id": modifierEntry.getComponent().getId(),
-                                                "button:nth-child(1)@class": "js_add " + (ProductDetailController.compositionManager.getConfigurator().canadd(composition, modifierEntry.getComponent().getId()) ? "" : " disabled"),
-                                                "button:nth-child(2)@data-id": modifierEntry.getComponent().getId(),
-                                                "button:nth-child(2)@class": "js_add " + (ProductDetailController.compositionManager.getConfigurator().canreduce(composition, modifierEntry.getComponent().getId()) ? "" : " disabled"),
-                                            }
-                                        }
+                                    "": variantValue.getValue(),
+                                    "@value": variantValue.getValue(),
+                                    "@selected": {
+                                        add: variantValue.getValue() == product.getVariantValues()[status.index], "value": "selected"
                                     }
                                 }
                             }
                         }
                     }
                 }
+            },
+            ".variantLabel": product.getLabel(),
+            ".price": formatPrice(PriceManager.findPrice(product, composition.getUom())),
+            ".actions button:nth-child(1)@data-id": product.getId(),
+            ".actions button:nth-child(1)@data-type": "Component",
+            ".actions button:nth-child(2)@data-id": product.getId(),
+            ".actions button:nth-child(2)@data-type": "Component",
+            "ul#modifiers li": {
+                items: product.getModifiers(),
+                each: (modifier: Modifier) => {
+                                return {
+                        ".modifierLabel": modifier.getId(),
+                        "ul li": {
+                            items: modifier.getModifierEntries(),
+                            each: (modifierEntry: ModifierEntry) => {
+                                            return {
+                                    "span": modifierEntry.getComponent().getLabel(),
+                                    ".price": formatPrice(PriceManager.findPrice(modifierEntry.getComponent(), composition.getUom())),
+                                    "button:nth-child(1)@data-id": modifierEntry.getComponent().getId(),
+                                    "button:nth-child(1)@data-type": "Component",
+                                    "button:nth-child(1)@class": "js_add " + (ProductDetailController.compositionConfigurator.canadd(composition, modifierEntry.getComponent().getId()) ? "" : " disabled"),
+                                    "button:nth-child(2)@data-id": modifierEntry.getComponent().getId(),
+                                    "button:nth-child(2)@data-type": "Component",
+                                    "button:nth-child(2)@class": "js_add " + (ProductDetailController.compositionConfigurator.canreduce(composition, modifierEntry.getComponent().getId()) ? "" : " disabled"),
+                                }
+                                }
+                        }
+                    }
+                }
             }
         }
 	}
-PUREST.render(".template", directive(product));
+PUREST.render(".template", directive(product), ".configurator");
 }
 
 function formatPrice(p: number) {
@@ -104,9 +85,10 @@ function formatPrice(p: number) {
 function renderComposition(composition: Composition) {
     var directive = function(composition: Composition) {
         return {
+            '@style': '',
             '#cid': composition.getComponentId(),
             '#clabel': composition.getComponent().getLabel(),
-            '#pprice': formatPrice(composition.getQuantity() * composition.getComponent().getPrice()),
+            '#pprice': formatPrice(composition.getQuantity() * PriceManager.findPrice(composition.getComponent(), composition.getUom())),
             '#cquantity': composition.getQuantity(),
             '#cprice': formatPrice(composition.getPrice()),
             'li': {
@@ -115,11 +97,35 @@ function renderComposition(composition: Composition) {
                     return {
                         ".quantity": subComposition.getQuantity(),
                         ".label": subComposition.getComponent().getLabel(),
-                        ".price": formatPrice(composition.getQuantity() * subComposition.getPrice())
+                        ".price": formatPrice(composition.getQuantity() * //
+                            subComposition.getPrice(
+                                Math.max(0,
+                                    subComposition.getQuantity() -
+                                    CompositionConfigurator.getIncludedQuantity(composition.getComponent(), subComposition.getComponentId())
+                                    )
+                                )
+                            )
                     }
                 }
             }
         }
     }
-    PUREST.render(".ctemplate", directive(composition));
+    PUREST.render(".ctemplate", directive(composition), ".summary");
+}
+
+function renderNavi(category: Category) {
+    var directive = function(category: Category) {
+        return {
+            'a': {
+                items: category.getProducts(),
+                each: (product: Component) => {
+                    return {
+                        "@data-productid": product.getId(),
+                        "": product.getLabel()
+                    }
+                }
+            }
+        }
+    }
+    PUREST.render(".navi", directive(category));
 }
